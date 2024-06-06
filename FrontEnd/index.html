@@ -1,9 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mi App Electron</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background-color: #000; /* Fondo negro */
+      }
+      .wave {
+        height: 5px;
+        background-color: #daa520; /* Color dorado para la onda */
+      }
+    </style>
   </head>
-  <body>
-    <h1>Hola, Electrón!</h1>
+  <body class="flex items-center justify-center h-screen text-white">
+    <div class="text-center">
+      <div class="wave mb-6"></div>
+      <h1 class="text-5xl font-bold mb-6">BRAINSCOPE</h1>
+      <div class="flex justify-center space-x-4">
+        <button
+          class="bg-transparent hover:bg-gold-600 text-gold-500 font-semibold hover:text-white py-2 px-4 border border-gold-500 hover:border-transparent rounded"
+        >
+          View Session Metrics
+        </button>
+        <button
+          class="bg-transparent hover:bg-gold-600 text-gold-500 font-semibold hover:text-white py-2 px-4 border border-gold-500 hover:border-transparent rounded"
+        >
+          Process Data
+        </button>
+      </div>
+    </div>
   </body>
 </html>
