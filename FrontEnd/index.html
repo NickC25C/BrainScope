@@ -5,31 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mi App Electron</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
     <style>
       body {
         background-color: #000; /* Fondo negro */
       }
-      .wave {
-        height: 5px;
-        background-color: #daa520; /* Color dorado para la onda */
+      .title {
+        color: #cf9e1f;
       }
     </style>
   </head>
-  <body class="flex items-center justify-center h-screen text-white">
+  <body
+    class="flex font-mono items-center justify-center h-screen text-white space-y-40"
+  >
     <div class="text-center">
-      <div class="wave mb-6"></div>
-      <h1 class="text-5xl font-bold mb-6">BRAINSCOPE</h1>
-      <div class="flex justify-center space-x-4">
-        <button
-          class="bg-transparent hover:bg-gold-600 text-gold-500 font-semibold hover:text-white py-2 px-4 border border-gold-500 hover:border-transparent rounded"
-        >
-          View Session Metrics
-        </button>
-        <button
-          class="bg-transparent hover:bg-gold-600 text-gold-500 font-semibold hover:text-white py-2 px-4 border border-gold-500 hover:border-transparent rounded"
-        >
-          Process Data
-        </button>
+      <img
+        src="images/onda.png"
+        alt="Imagen de fondo"
+        class="w-screen h-auto"
+      />
+      <div
+        class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-10"
+      >
+        <h1 class="title text-9xl mb-20">BRAINSCOPE</h1>
+      </div>
+      <div class="absolute inset-x-0 bottom-30 flex justify-center space-x-40">
+        <div class="flex flex-col items-center space-y-4">
+          <img
+            src="images/Neuroscience Experiment.png"
+            alt="Icon"
+            class="mr-2 w-90 h-90"
+          />
+          <button
+            class="bg-transparent hover:bg-gold-600 text-white hover:text-orange-300 py-2 px-2 border border-orange-300 hover:border-transparent rounded"
+          >
+            View Session Metrics
+          </button>
+        </div>
+        <div class="flex flex-col items-center space-y-4">
+          <img
+            src="images/Database Administrator.png"
+            alt="Icon"
+            class="mr-2 w-90 h-90"
+          />
+          <button
+            class="bg-transparent hover:bg-gold-600 text-white hover:text-orange-300 py-2 px-10 border border-orange-300 hover:border-transparent rounded"
+          >
+            Process Data
+          </button>
+        </div>
       </div>
     </div>
   </body>
