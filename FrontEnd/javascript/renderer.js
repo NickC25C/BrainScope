@@ -1,32 +1,104 @@
-const { Chart } = require("chart.js");
+const {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+  Tooltip,
+  Legend,
+} = require("chart.js");
+
+// Registra los componentes necesarios para gráficos de líneas
+Chart.register(
+  CategoryScale,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+  Tooltip,
+  Legend
+);
 
 window.onload = function () {
-  var ctx = document.getElementById("myChart").getContext("2d");
-  var myChart = new Chart(ctx, {
-    type: "bar",
+  console.log("hola");
+
+  var ctx_Wor = document.getElementById("myChart_Workload").getContext("2d");
+  var ctx_Mem = document
+    .getElementById("myChart_Memorization")
+    .getContext("2d");
+  var ctx_Eng = document.getElementById("myChart_Engagement").getContext("2d");
+  var myChart = new Chart(ctx_Wor, {
+    type: "line",
     data: {
-      labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+      labels: ["January", "February", "March", "April", "May", "June"],
       datasets: [
         {
-          label: "# of Votes",
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)",
-          ],
-          borderColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-            "rgba(255, 159, 64, 1)",
-          ],
-          borderWidth: 1,
+          label: "Number of Items Sold",
+          data: [65, 59, 80, 81, 56, 55],
+          fill: false,
+          borderColor: "rgb(117, 249, 76)",
+          tension: 0.1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+    responsive: true,
+  });
+  console.log("hola");
+
+  var myChart = new Chart(ctx_Mem, {
+    type: "line",
+    data: {
+      labels: ["January", "February", "March", "April", "May", "June"],
+      datasets: [
+        {
+          label: "Number of Items Sold",
+          data: [65, 59, 80, 81, 56, 55],
+          fill: false,
+          borderColor: "rgb(135, 178, 140)",
+          tension: 0.1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+    responsive: true,
+  });
+
+  var myChart = new Chart(ctx_Eng, {
+    type: "line",
+    data: {
+      labels: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+      ],
+      datasets: [
+        {
+          label: "Number of Items Sold",
+          data: [65, 59, 80, 81, 56, 55, 90, 45, 11, 23],
+          fill: false,
+          borderColor: "rgb(187, 39, 26)",
+          tension: 0.1,
         },
       ],
     },
@@ -38,6 +110,4 @@ window.onload = function () {
       },
     },
   });
-  console.log("hola");
-  return myChart;
 };

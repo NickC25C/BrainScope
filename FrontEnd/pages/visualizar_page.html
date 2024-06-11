@@ -21,6 +21,15 @@
       .title {
         color: #cf9e1f;
       }
+      .engagement {
+        color: #bb271a;
+      }
+      .workload {
+        color: #75f94c;
+      }
+      .memorization {
+        color: #87b28c;
+      }
     </style>
   </head>
   <body
@@ -43,11 +52,34 @@
         Your browser does not support the video tag.
       </video>
     </div>
-    <hr class="border-gray-300 mx- 4 my-4" />
-    <h1 class="text-2xl font-bold mb-4">My Chart</h1>
-    <div class="w-full max-w-lg mx-auto">
-      <canvas id="myChart" class="w-full h-64"></canvas>
+    <hr class="border-2 border-orange-400 mx-8 my-4" />
+    <div class="flex space-x-20 px-8 py-2">
+      <div class="flex flex-col w-40 justify-center items-center space-y-18">
+        <img src="../images/Learning.png" alt="Work" class="mr-2 w-20" />
+        <h1 class="workload text-[20px]">Workload</h1>
+      </div>
+      <div class="flex flex-col w-screen h-96">
+        <canvas id="myChart_Workload"></canvas>
+      </div>
+      <script src="../javascript/renderer.js"></script>
     </div>
-    <script src="../javascript/renderer.js"></script>
+    <div class="flex space-x-20 px-8 py-2">
+      <div class="flex flex-col w-40 justify-center items-center space-y-18">
+        <img src="../images/Book And Pencil.png" alt="Mem" class="mr-2 w-20" />
+        <h1 class="memorization text-[20px]">Memorization</h1>
+      </div>
+      <div class="w-full h-96">
+        <canvas id="myChart_Memorization"></canvas>
+      </div>
+    </div>
+    <div class="flex space-x-20 px-8 py-2">
+      <div class="flex flex-col w-40 justify-center items-center space-y-18">
+        <img src="../images/Engage.png" alt="Engage" class="mr-2 w-20" />
+        <h1 class="engagement text-[20px]">Engagement</h1>
+      </div>
+      <div class="w-full h-96">
+        <canvas id="myChart_Engagement"></canvas>
+      </div>
+    </div>
   </body>
 </html>

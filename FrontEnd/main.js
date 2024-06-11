@@ -13,7 +13,11 @@ function createWindow() {
     autoHideMenuBar: true,
   });
 
-  mainWindow.loadFile("pages/visualizar_page.html");
+  mainWindow.loadFile("index.html");
+
+  ipcMain.on("change-page", (event, path) => {
+    mainWindow.loadFile(path);
+  });
 }
 
 app.whenReady().then(createWindow);
