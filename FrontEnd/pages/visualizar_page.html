@@ -35,9 +35,10 @@
   <body
     class="font-mono items-center justify-center h-screen text-white space-y-40"
   >
-    <button class="absolute left-7 top-4">
+    <button class="absolute left-7 top-4" id="changeToIndex">
       <img src="../images/Back Arrow.png" alt="Icon" class="mr-2 w-50 h-50" />
     </button>
+    <script src="../javascript/change_page_index.js"></script>
     <div class="flex justify-center space-x-96">
       <div>
         <img src="../images/mapa de calor 1.png" alt="Mapa" class="mr-2 w-52" />
@@ -52,33 +53,39 @@
         Your browser does not support the video tag.
       </video>
     </div>
-    <hr class="border-2 border-orange-400 mx-8 my-4" />
-    <div class="flex space-x-20 px-8 py-2">
-      <div class="flex flex-col w-40 justify-center items-center space-y-18">
-        <img src="../images/Learning.png" alt="Work" class="mr-2 w-20" />
-        <h1 class="workload text-[20px]">Workload</h1>
+    <hr class="border-2 border-orange-400 mx-8" />
+    <div class="space-[0]">
+      <div class="flex space-x-20 px-8">
+        <div class="flex flex-col w-40 justify-center items-center">
+          <img src="../images/Learning.png" alt="Work" class="mr-2 w-20" />
+          <h1 class="workload text-[20px]">Workload</h1>
+        </div>
+        <div class="flex w-screen">
+          <canvas class="scale-y-50" id="myChart_Workload"></canvas>
+        </div>
+        <script src="../javascript/renderer.js"></script>
       </div>
-      <div class="flex flex-col w-screen h-96">
-        <canvas id="myChart_Workload"></canvas>
+      <div class="flex space-x-20 px-8">
+        <div class="flex flex-col w-40 justify-center items-center">
+          <img
+            src="../images/Book And Pencil.png"
+            alt="Mem"
+            class="mr-2 w-20"
+          />
+          <h1 class="memorization text-[20px]">Memorization</h1>
+        </div>
+        <div class="flex w-screen">
+          <canvas class="scale-y-50" id="myChart_Memorization"></canvas>
+        </div>
       </div>
-      <script src="../javascript/renderer.js"></script>
-    </div>
-    <div class="flex space-x-20 px-8 py-2">
-      <div class="flex flex-col w-40 justify-center items-center space-y-18">
-        <img src="../images/Book And Pencil.png" alt="Mem" class="mr-2 w-20" />
-        <h1 class="memorization text-[20px]">Memorization</h1>
-      </div>
-      <div class="w-full h-96">
-        <canvas id="myChart_Memorization"></canvas>
-      </div>
-    </div>
-    <div class="flex space-x-20 px-8 py-2">
-      <div class="flex flex-col w-40 justify-center items-center space-y-18">
-        <img src="../images/Engage.png" alt="Engage" class="mr-2 w-20" />
-        <h1 class="engagement text-[20px]">Engagement</h1>
-      </div>
-      <div class="w-full h-96">
-        <canvas id="myChart_Engagement"></canvas>
+      <div class="flex space-x-20 px-8">
+        <div class="flex flex-col w-40 justify-center items-center">
+          <img src="../images/Engage.png" alt="Engage" class="mr-2 w-20" />
+          <h1 class="engagement text-[20px]">Engagement</h1>
+        </div>
+        <div class="flex w-screen">
+          <canvas class="scale-y-50" id="myChart_Engagement"></canvas>
+        </div>
       </div>
     </div>
   </body>

@@ -22,46 +22,35 @@
     </style>
   </head>
   <body
-    class="flex font-mono items-center justify-center h-screen text-white space-y-40"
+    class="flex flex-col font-mono items-center justify-center h-screen text-white space-y-40"
   >
-    <div class="text-center">
-      <img
-        src="images/onda.png"
-        alt="Imagen de fondo"
-        class="w-screen h-auto"
-      />
+    <h1 class="text-3xl font-bold title absolute left-7 top-10">
+      Process Data
+    </h1>
+    <div class="w-11/12 h-8 bg-gray-200 rounded-full dark:bg-gray-700">
       <div
-        class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-10"
+        id="progressbar"
+        class="h-8 bg-orange-400 text-lg font-semibold text-black text-center p-1.5 leading-none rounded-full"
+        style="width: 0%"
       >
-        <h1 class="title text-9xl mb-20">BRAINSCOPE</h1>
+        0%
       </div>
-      <div class="absolute inset-x-0 bottom-30 flex justify-center space-x-40">
-        <div class="flex flex-col items-center space-y-4">
-          <img
-            src="images/Neuroscience Experiment.png"
-            alt="Icon"
-            class="mr-2 w-90 h-90"
-          />
-          <button
-            class="bg-transparent hover:bg-gold-600 text-white hover:text-orange-300 py-2 px-2 border border-orange-300 hover:border-transparent rounded"
-            id="changeToVision"
-          >
-            View Session Metrics
-          </button>
-        </div>
-        <div class="flex flex-col items-center space-y-4">
-          <img
-            src="images/Database Administrator.png"
-            alt="Icon"
-            class="mr-2 w-90 h-90"
-          />
-          <button
-            class="bg-transparent hover:bg-gold-600 text-white hover:text-orange-300 py-2 px-10 border border-orange-300 hover:border-transparent rounded"
-          >
-            Process Data
-          </button>
-        </div>
-      </div>
+      <script src="../javascript/progressBar.js"></script>
+    </div>
+    <div class="w-1/2 flex flex-col space-y-10 py-28">
+      <button
+        class="h-16 bg-transparent hover:bg-gold-600 text-white text-2xl hover:text-orange-300 py-2 px-10 border border-orange-300 hover:border-transparent rounded"
+        id="changeToProcessData"
+      >
+        Download Data Procesed
+      </button>
+      <button
+        class="h-16 bg-transparent hover:bg-gold-600 text-white text-2xl hover:text-orange-300 py-2 px-10 border border-orange-300 hover:border-transparent rounded"
+        id="changeToIndex"
+      >
+        End Process
+      </button>
+      <script src="../javascript/change_page_index.js"></script>
     </div>
   </body>
 </html>
