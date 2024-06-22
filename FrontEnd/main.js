@@ -1,12 +1,11 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
-const path = require("path");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 1440,
-    height: 1024,
-    minWidth: 1440,
-    minHeight: 1024,
+    width: 1480,
+    height: 1010,
+    minWidth: 1480,
+    minHeight: 1010,
     webPreferences: {
       contextIsolation: false,
       //preload: path.join(__dirname, 'preload.js'),
@@ -46,6 +45,15 @@ function createDataWindow() {
   ipcMain.on("close-me", (event) => {
     let window = BrowserWindow.fromWebContents(event.sender);
     window.close();
+  });
+
+  ipcMain.on("open-file-dialog", async (event) => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      properties: ["openFile", "multiSelections"], // Permite seleccionar múltiples archivos
+    });
+    if (!canceled) {
+      event.reply("selected-file", filePaths);
+    }
   });
 }
 
