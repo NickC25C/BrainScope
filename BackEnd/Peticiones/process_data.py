@@ -1,23 +1,33 @@
 import pandas as pd
 
-def split_csv(input_file):
-    # Leer el archivo CSV
-    data = pd.read_csv(input_file)
-    
-    # Definir las combinaciones de columnas
+class ModuleProcessData:
+
     column_sets = {
         'Engagement': ['time(s)', 'Engagement'],
         'Memorization': ['time(s)', 'Memorization'],
         'Workload': ['time(s)', 'Workload']
     }
-    
-    # Crear y guardar los archivos CSV separados
-    for key, columns in column_sets.items():
-        output_file = f'{key}.csv'
-        df = data[columns]
-        df.to_csv(output_file, index=False)
-        print(f'Archivo creado: {output_file}')
 
-# Usar la función con el nombre del archivo de entrada
-input_file = 'archivo_unido.csv'
-split_csv(input_file)
+    def split_Engagement_csv(self, input_file):
+        # Crear y guardar los archivos CSV separados
+        key, columns = self.column_sets['Engagement']
+        df = input_file[columns]
+        output_file = 'Engagement.csv'
+        df.to_csv(output_file, index=False)
+        return output_file
+
+    def split_Memorization_csv(self, input_file):
+        # Crear y guardar los archivos CSV separados
+        key, columns = self.column_sets['Memorization']
+        df = input_file[columns]
+        output_file = 'Memorization.csv'
+        df.to_csv(output_file, index=False)
+        return output_file
+
+    def split_Workload_csv(self, input_file):
+        # Crear y guardar los archivos CSV separados
+        key, columns = self.column_sets['Workload']
+        df = input_file[columns]
+        output_file = 'Workload.csv'
+        df.to_csv(output_file, index=False)
+        return output_file
