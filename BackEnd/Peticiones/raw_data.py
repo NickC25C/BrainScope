@@ -1,65 +1,43 @@
 import numpy as np
-import pandas as pd
 import mne
-from mne import create_info
+import pandas as pd
 
-def traspose_data(data):
-    data = np.loadtxt(data, delimiter=',', usecols=(range(0,12)))
-    print("hola1")
-    print(data)
-
-    ch_names = ['AF7', 'Fp1', 'Fp2', 'AF8', 'F3', 'F4', 'P3', 'P4', 'PO7',
-                'O1', 'O2', 'PO8']
-    sfreq = 256  
+def load_and_configure_data(filepath):
+    data = np.loadtxt(filepath, delimiter=',', usecols=(range(0,12)))
+    ch_names = ['AF7', 'Fp1', 'Fp2', 'AF8', 'F3', 'F4', 'P3', 'P4', 'PO7', 'O1', 'O2', 'PO8']
+    sfreq = 256
     info = mne.create_info(ch_names, sfreq, ch_types='eeg')
-
     montage = mne.channels.make_standard_montage('standard_1020')
     info.set_montage(montage)
+    return mne.io.RawArray(data.transpose(), info)
 
-    #transpone los datos (columnas por filas)
+def filter_signal(raw, low_cut=1.0, high_cut=30):
+    return raw.copy().filter(low_cut, high_cut)
 
-    raw = mne.io.RawArray(data.transpose(), info)
-    #raw.compute_psd().plot()
+def configure_and_fit_ica(raw, n_components=0.99, random_state=42):
+    ica = mne.preprocessing.ICA(n_components=n_components, random_state=random_state)
+    ica.fit(raw)
+    return ica
 
-    ica_low_cut = 1.0       
-    hi_cut  = 30
-    raw_ica = raw.copy().filter(ica_low_cut, hi_cut)
-
-    random_state = 42   # ensures ICA is reproducable each time it's run
-    ica_n_components = .99     # Specify n_components as a decimal to set % explained variance
-
-
-    ica = mne.preprocessing.ICA(n_components=ica_n_components,
-                                random_state=random_state,
-                                )
-
-    ica.fit(raw_ica)
-
-
-    ica_z_thresh = 1.96 
-    eog_indices, eog_scores = ica.find_bads_eog(raw_ica, 
-                                                ch_name=['Fp1', 'AF8'], 
-                                                threshold=ica_z_thresh)
+def find_and_exclude_artifacts(ica, raw, ch_names=['Fp1', 'AF8'], z_thresh=1.96):
+    eog_indices, _ = ica.find_bads_eog(raw, ch_name=ch_names, threshold=z_thresh)
     ica.exclude = eog_indices
+    return ica
 
+def apply_ica(ica, raw):
+    return ica.apply(raw.copy())
 
-    info = create_info(ch_names, 1, "eeg")
-    processed_data = ica.apply(raw_ica.copy())
+def save_cleaned_data(raw, filename='processed_data.csv'):
+    data, times = raw[:]  # Extrae los datos y los tiempos del objeto Raw
+    # Crear DataFrame con tiempos como índice y los nombres de los canales como columnas
+    data_frame = pd.DataFrame(data.T, index=times, columns=raw.ch_names)
+    data_frame.to_csv(filename, header=True, index=False)
 
-    print(processed_data.get_data())
-
-    print("hola")
-    print(processed_data[:5, :5])
-
-    data_process, times = processed_data[:, :]
-
-    print("hola2")
-    print(data_process)
-
-    data_from_process_data = processed_data.get_data()  # Esto extrae todos los datos y los tiempos del objeto Raw-
-
-    # Crear un DataFrame de pandas
-    data_frame = pd.DataFrame(data_process)
-
-    # Guardar el DataFrame en CSV
-    return data_frame.to_csv('processed_data.csv', header=False, index=False)
+# Ejemplo de cómo usar estas funciones
+filepath = 'didi_eeg.csv'
+raw = load_and_configure_data(filepath)
+raw_filtered = filter_signal(raw)
+ica = configure_and_fit_ica(raw_filtered)
+ica = find_and_exclude_artifacts(ica, raw_filtered)
+cleaned_data = apply_ica(ica, raw_filtered)
+save_cleaned_data(cleaned_data)
