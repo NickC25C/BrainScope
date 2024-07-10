@@ -12,8 +12,18 @@ window.addEventListener("DOMContentLoaded", () => {
 
   ipcRenderer.on("selected-file", (event, paths) => {
     console.log("Archivos Seleccionados:", paths);
+    fileLists = fileLists.concat(paths);
+    const { csvCount, mp4Count } = countFileTypes(fileLists);
+
+    if (csvCount > 2 || mp4Count > 1) {
+      errorMessage.textContent =
+        "Error: Máximo 2 archivos CSV y 1 archivo MP4 permitidos.";
+      fileLists.pop();
+      return; // Detener el proceso si la validación falla
+    }
+    errorMessage.textContent = ""; // Limpiar mensajes de error previos
     window.selectedFiles = paths; // Esto almacena los archivos seleccionados más recientes en una variable global.
-    fileLists = fileLists.concat(paths); // Esto agrega los nuevos archivos a la lista acumulativa.
+    // Esto agrega los nuevos archivos a la lista acumulativa.
     console.log(fileLists);
     fileList.innerHTML = ""; // Limpiamos el contenido anterior del elemento de la lista.
     fileLists.forEach((filePath, index) => {
@@ -22,3 +32,19 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+function countFileTypes(files) {
+  let csvCount = 0;
+  let mp4Count = 0;
+
+  files.forEach((file) => {
+    const extension = file.split(".").pop().toLowerCase(); // Obtener la extensión del archivo
+    if (extension === "csv") {
+      csvCount++;
+    } else if (extension === "mp4") {
+      mp4Count++;
+    }
+  });
+
+  return { csvCount, mp4Count };
+}
