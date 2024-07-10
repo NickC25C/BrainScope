@@ -48,9 +48,19 @@ function createDataWindow() {
   });
 
   ipcMain.on("open-file-dialog", async (event) => {
-    const { canceled, filePaths } = await dialog.showOpenDialog({
-      properties: ["openFile", "multiSelections"], // Permite seleccionar múltiples archivos
-    });
+    const { canceled, filePaths } = await dialog
+      .showOpenDialog({
+        properties: ["openFile", "multiSelections"], // Permite seleccionar múltiples archivos
+        filters: [{ name: "Files", extensions: ["csv", "mp4"] }],
+      })
+      .then((result) => {
+        if (!result.canceled && result.filePaths.length > 0) {
+          event.sender.send("selected-file", result.filePaths);
+        }
+      })
+      .catch((err) => {
+        console.log("Error al abrir el diálogo de archivos:", err);
+      });
     if (!canceled) {
       event.reply("selected-file", filePaths);
     }

@@ -15,8 +15,7 @@ class ViewerFacade:
         self.rawData = ModuleRawData()
 
     def trasnformData(self, inputfile):
-        with open(inputfile, 'r') as file:
-            raw = self.rawData.load_and_configure_data(file)
+        raw = self.rawData.load_and_configure_data(inputfile)
         raw_filtered = self.rawData.filter_signal(raw)
         ica = self.rawData.configure_and_fit_ica(raw_filtered)
         ica = self.rawData.find_and_exclude_artifacts(ica, raw_filtered)
@@ -24,16 +23,13 @@ class ViewerFacade:
         return self.rawData.save_cleaned_data(cleaned_data)
 
     def getEngagementFile(self, inputfile):
-        with open(inputfile, 'r') as file:
-            engagementFile = self.processData.split_Engagement_csv(file)
+        engagementFile = self.processData.split_Engagement_csv(inputfile)
         return engagementFile
 
     def getMemorizationFile(self, inputfile):
-        with open(inputfile, 'r') as file:
-            memorizationFile = self.processData.split_Memorization_csv(file)
+        memorizationFile = self.processData.split_Memorization_csv(inputfile)
         return memorizationFile
 
     def getWorkloadFile(self, inputfile):
-        with open(inputfile, 'r') as file:
-            workloadtFile = self.processData.split_Workload_csv(file)
+        workloadtFile = self.processData.split_Workload_csv(inputfile)
         return workloadtFile
