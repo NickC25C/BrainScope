@@ -1,9 +1,21 @@
-const { dialog } = require("electron").remote;
+const { dialog } = require("@electron/remote");
 const fs = require("fs");
 const { spawn } = require("child_process");
+var { ipcRenderer } = require("electron");
+const { Console } = require("console");
+
+ipcRenderer.send("get-global-list");
+
+ipcRenderer.on("global-var-reply", (event, fileList) => {
+  console.log("La variable global es:", fileList);
+  fileList.forEach((file) => {
+    console.log(file);
+    sendFileToPython(file);
+  });
+});
 
 // Lanzar el proceso Python
-const pythonProcess = spawn("python", ["../../BackEnd/petitions.py"]);
+const pythonProcess = spawn("python", ["../BackEnd/connector_to_fachade.py"]);
 
 // Función para enviar un archivo
 function sendFileToPython(filePath) {
@@ -13,6 +25,8 @@ function sendFileToPython(filePath) {
       return;
     }
 
+    console.log(data);
+
     // Enviar el contenido del archivo a Python
     const command = {
       method: "transformData",
@@ -21,9 +35,12 @@ function sendFileToPython(filePath) {
       },
     };
 
-    console.log("hola");
+    console.log(command);
 
     pythonProcess.stdin.write(JSON.stringify(command) + "\n");
+
+    // Cerrar stdin para simular EOF
+    pythonProcess.stdin.end();
   });
 }
 
@@ -41,17 +58,3 @@ pythonProcess.stderr.on("data", (data) => {
 pythonProcess.on("close", (code) => {
   console.log(`child process exited with code ${code}`);
 });
-
-// Opción para seleccionar un archivo usando un diálogo
-dialog
-  .showOpenDialog({
-    properties: ["openFile"],
-  })
-  .then((result) => {
-    if (!result.canceled && result.filePaths.length > 0) {
-      sendFileToPython(result.filePaths[0]);
-    }
-  })
-  .catch((err) => {
-    console.error(err);
-  });

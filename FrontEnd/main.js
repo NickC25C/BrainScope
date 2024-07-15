@@ -1,4 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+require("@electron/remote/main").initialize();
+
+global.fileLists = [];
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -14,6 +17,8 @@ function createWindow() {
     autoHideMenuBar: true,
   });
 
+  require("@electron/remote/main").enable(mainWindow.webContents);
+
   mainWindow.loadFile("index.html");
 
   ipcMain.on("change-page", (event, path) => {
@@ -23,16 +28,25 @@ function createWindow() {
   ipcMain.on("open-data-window", () => {
     createDataWindow();
   });
+
+  ipcMain.on("add-to-fileLists", (event, newFiles) => {
+    global.fileLists = global.fileLists.concat(newFiles);
+    console.log(global.fileLists);
+  });
+
+  ipcMain.on("get-global-list", (event) => {
+    event.reply("global-var-reply", global.fileLists);
+  });
 }
 
 function createDataWindow() {
   const dataWindow = new BrowserWindow({
     width: 931,
-    height: 526,
+    height: 700,
     minWidth: 931,
-    minHeight: 526,
+    minHeight: 700,
     maxWidth: 931,
-    maxHeight: 526,
+    maxHeight: 700,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -50,7 +64,7 @@ function createDataWindow() {
   ipcMain.on("open-file-dialog", async (event) => {
     const { canceled, filePaths } = await dialog
       .showOpenDialog({
-        properties: ["openFile", "multiSelections"], // Permite seleccionar múltiples archivos
+        properties: ["openFile"], // Permite seleccionar múltiples archivos
         filters: [{ name: "Files", extensions: ["csv", "mp4"] }],
       })
       .then((result) => {
