@@ -50,6 +50,5 @@ class ModuleRawData:
         
         # Convertir DataFrame a un formato JSON serializable, como un diccionario
         json_data = df.to_dict(orient='records')  # 'records' convierte el DataFrame en una lista de diccionarios
-        print(json_data)
         
         return json_data
