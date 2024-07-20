@@ -11,7 +11,7 @@ def main():
             command = json.loads(input_json)
 
             # Decodificar el contenido del CSV desde la entrada y procesarlo
-            if command['method'] == 'transformData':
+            if command['method'] == 'processData':
                 result = processer.contact_with_server()  # Corrección de typo en 'trasnformData'
             else:
                 result = {'error': 'Unknown command'}

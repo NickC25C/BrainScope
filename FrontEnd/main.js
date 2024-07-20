@@ -29,6 +29,10 @@ function createWindow() {
     createDataWindow();
   });
 
+  ipcMain.on("open-process-window", () => {
+    createProcessWindow();
+  });
+
   ipcMain.on("add-to-fileLists", (event, newFiles) => {
     global.fileLists = global.fileLists.concat(newFiles);
     console.log(global.fileLists);
@@ -55,6 +59,48 @@ function createDataWindow() {
   });
 
   dataWindow.loadFile("pages/escoger_datos.html");
+
+  ipcMain.on("close-me", (event) => {
+    let window = BrowserWindow.fromWebContents(event.sender);
+    window.close();
+  });
+
+  ipcMain.on("open-file-dialog", async (event) => {
+    const { canceled, filePaths } = await dialog
+      .showOpenDialog({
+        properties: ["openFile"], // Permite seleccionar múltiples archivos
+        filters: [{ name: "Files", extensions: ["csv", "mp4"] }],
+      })
+      .then((result) => {
+        if (!result.canceled && result.filePaths.length > 0) {
+          event.sender.send("selected-file", result.filePaths);
+        }
+      })
+      .catch((err) => {
+        console.log("Error al abrir el diálogo de archivos:", err);
+      });
+    if (!canceled) {
+      event.reply("selected-file", filePaths);
+    }
+  });
+}
+
+function createProcessWindow() {
+  const processWindow = new BrowserWindow({
+    width: 931,
+    height: 700,
+    minWidth: 931,
+    minHeight: 700,
+    maxWidth: 931,
+    maxHeight: 700,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+    autoHideMenuBar: true,
+  });
+
+  processWindow.loadFile("pages/escoger_datos_procesar.html");
 
   ipcMain.on("close-me", (event) => {
     let window = BrowserWindow.fromWebContents(event.sender);
