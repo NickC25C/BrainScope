@@ -59,6 +59,7 @@ function createWindow() {
 
   ipcMain.on("get-global-csv", (event) => {
     event.reply("global-csv-reply", global.dataCsv);
+    global.dataCsv = undefined;
   });
 }
 

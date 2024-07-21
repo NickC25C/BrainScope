@@ -22,8 +22,9 @@ document.addEventListener("DOMContentLoaded", function () {
     this.checkVariableInterval = setInterval(() => {
       ipcRenderer.invoke("getVariableValue").then((variableValue) => {
         if (variableValue !== undefined) {
-          animateProgress(100);
-          clearInterval(mainInterval);
+          animateProgress(100); // Mueve la barra a 100%
+          clearInterval(mainInterval); // Detiene la iteración principal
+          document.getElementById("DownloadData").disabled = false; // Asegura habilitar el botón
         }
       });
     }, 1000); // Comprueba cada 1 segundo
@@ -39,6 +40,10 @@ document.addEventListener("DOMContentLoaded", function () {
         progressBar.style.width = currentWidth + "%";
         progressBar.textContent = Math.floor(currentWidth) + "%";
         requestAnimationFrame(step);
+      } else {
+        if (currentWidth >= 100) {
+          document.getElementById("DownloadData").disabled = false; // Habilitar el botón
+        }
       }
     };
     requestAnimationFrame(step);
