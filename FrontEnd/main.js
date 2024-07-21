@@ -38,6 +38,11 @@ function createWindow() {
     console.log(global.fileLists);
   });
 
+  ipcMain.on("add-to-fileProcess", (event, newFiles) => {
+    global.fileLists = global.fileLists.concat(newFiles);
+    console.log(global.fileLists);
+  });
+
   ipcMain.on("get-global-list", (event) => {
     event.reply("global-var-reply", global.fileLists);
   });
@@ -111,7 +116,7 @@ function createProcessWindow() {
     const { canceled, filePaths } = await dialog
       .showOpenDialog({
         properties: ["openFile"], // Permite seleccionar múltiples archivos
-        filters: [{ name: "Files", extensions: ["csv", "mp4"] }],
+        filters: [{ name: ".csv", extensions: ["csv"] }],
       })
       .then((result) => {
         if (!result.canceled && result.filePaths.length > 0) {

@@ -1,4 +1,5 @@
 from Procesamiento_Datos.comunicator import Comunicator
+import json
 
 class ProcessFacade:
     _instance = None
@@ -12,5 +13,5 @@ class ProcessFacade:
     def initialize(self):
         self.comunicator = Comunicator()
 
-    def processRawData(self):
-        return self.comunicator.contact_with_server()
+    def processRawData(self, data):
+        return self.comunicator.contact_with_server(data)

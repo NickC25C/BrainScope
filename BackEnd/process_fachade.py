@@ -1,9 +1,9 @@
 import sys
 import json
-from process_raw_data import Comunicator
+from process_raw_data import ProcessFacade
 
 def main():
-    processer = Comunicator()
+    processer = ProcessFacade()
 
     # Bucle infinito para mantener el proceso activo, leyendo línea por línea
     for input_json in sys.stdin:
@@ -12,7 +12,8 @@ def main():
 
             # Decodificar el contenido del CSV desde la entrada y procesarlo
             if command['method'] == 'processData':
-                result = processer.contact_with_server()  # Corrección de typo en 'trasnformData'
+                file_content = command['params']['inputfile']
+                result = processer.processRawData(file_content)  # Corrección de typo en 'trasnformData'
             else:
                 result = {'error': 'Unknown command'}
             print(json.dumps(result))  # Envía el resultado como JSON

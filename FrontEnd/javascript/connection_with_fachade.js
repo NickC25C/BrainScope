@@ -38,7 +38,7 @@ ipcRenderer.on("global-var-reply", (event, fileList) => {
 });
 
 // Lanzar el proceso Python
-const pythonProcess = spawn("python", ["../BackEnd/connector_to_fachade.py"]);
+const pythonProcess = spawn("python", ["../BackEnd/viewer_fachade.py"]);
 
 // Función para enviar un archivo
 function sendFileToTransform(filePath) {
@@ -61,73 +61,6 @@ function sendFileToTransform(filePath) {
     //pythonProcess.stdin.end();
   });
 }
-
-function sendFileToGetEngagement(filePath) {
-  fs.readFile(filePath, "utf8", (err, data) => {
-    if (err) {
-      console.error("Error reading file:", err);
-      return;
-    }
-
-    // Enviar el contenido del archivo a Python
-    const command = {
-      method: "getEngagementFile",
-      params: {
-        inputfile: data, // Envía el contenido del archivo como una cadena
-      },
-    };
-
-    pythonProcess.stdin.write(JSON.stringify(command) + "\n");
-
-    // Cerrar stdin para simular EOF
-    //pythonProcess.stdin.end();
-  });
-}
-
-function sendFileToGetMemorization(filePath) {
-  fs.readFile(filePath, "utf8", (err, data) => {
-    if (err) {
-      console.error("Error reading file:", err);
-      return;
-    }
-
-    // Enviar el contenido del archivo a Python
-    const command = {
-      method: "getMemorizationFile",
-      params: {
-        inputfile: data, // Envía el contenido del archivo como una cadena
-      },
-    };
-
-    pythonProcess.stdin.write(JSON.stringify(command) + "\n");
-
-    // Cerrar stdin para simular EOF
-    //pythonProcess.stdin.end();
-  });
-}
-
-function sendFileToGetWorkload(filePath) {
-  fs.readFile(filePath, "utf8", (err, data) => {
-    if (err) {
-      console.error("Error reading file:", err);
-      return;
-    }
-
-    // Enviar el contenido del archivo a Python
-    const command = {
-      method: "getWorkloadFile",
-      params: {
-        inputfile: data, // Envía el contenido del archivo como una cadena
-      },
-    };
-
-    pythonProcess.stdin.write(JSON.stringify(command) + "\n");
-
-    // Cerrar stdin para simular EOF
-    //pythonProcess.stdin.end();
-  });
-}
-
 // Escuchar respuestas de Python
 pythonProcess.stdout.on("data", (data) => {
   console.log(`stdout: ${data.toString()}`);
