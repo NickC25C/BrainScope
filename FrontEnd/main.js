@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 require("@electron/remote/main").initialize();
 
 global.fileLists = [];
+global.dataCsv;
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -43,8 +44,16 @@ function createWindow() {
     console.log(global.fileLists);
   });
 
+  ipcMain.on("assign_csv", (event, csvFile) => {
+    global.dataCsv = csvFile;
+  });
+
   ipcMain.on("get-global-list", (event) => {
     event.reply("global-var-reply", global.fileLists);
+  });
+
+  ipcMain.on("get-global-csv", (event) => {
+    event.reply("global-csv-reply", global.dataCsv);
   });
 }
 

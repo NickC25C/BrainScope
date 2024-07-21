@@ -10,8 +10,6 @@ class ModuleProcessData:
     }
 
     def split_Engagement_csv(self, data_string):
-
-        print("yo sopy engagement")
         # Crear y guardar los archivos CSV separados
 
         data_io = io.StringIO(data_string)
@@ -33,8 +31,6 @@ class ModuleProcessData:
 
     def split_Memorization_csv(self, data_string):
         # Crear y guardar los archivos CSV separados
-        print("yo sopy memorizacion")
-
         data_io = io.StringIO(data_string)
         
         # Cargar los datos en un DataFrame
@@ -53,7 +49,6 @@ class ModuleProcessData:
         return json_data
 
     def split_Workload_csv(self, data_string):
-        print("yo sopy workload")
         # Crear y guardar los archivos CSV separados
 
         data_io = io.StringIO(data_string)

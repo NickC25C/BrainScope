@@ -1,5 +1,5 @@
 const { dialog } = require("@electron/remote");
-const fs = require("fs");
+var fs = require("fs");
 const { spawn } = require("child_process");
 var { ipcRenderer } = require("electron");
 

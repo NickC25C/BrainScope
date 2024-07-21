@@ -1,7 +1,23 @@
-const { dialog } = require("@electron/remote");
-const fs = require("fs");
+var fs = require("fs");
 const { spawn } = require("child_process");
 var { ipcRenderer } = require("electron");
+
+// Función para convertir JSON a CSV
+function jsonToCsv(jsonData) {
+  // Suponemos que jsonData es un array de objetos JSON
+  if (!jsonData.length) return "";
+
+  // Obtener los encabezados
+  const headers = Object.keys(jsonData[0]).join(",");
+
+  // Convertir cada objeto JSON a una fila CSV
+  const rows = jsonData.map((obj) => {
+    return Object.values(obj).join(",");
+  });
+
+  // Combinar encabezados y filas
+  return headers + "\n" + rows.join("\n");
+}
 
 ipcRenderer.send("get-global-list");
 
@@ -40,9 +56,31 @@ function sendFileToProcess(filePath) {
     //pythonProcess.stdin.end();
   });
 }
+
 // Escuchar respuestas de Python
 pythonProcess.stdout.on("data", (data) => {
   console.log(`stdout: ${data.toString()}`);
+
+  // Parsear JSON desde la salida
+  try {
+    const jsonData = JSON.parse(data.toString().trim());
+
+    // Convertir a CSV
+    const csvData = jsonToCsv(jsonData);
+    console.log(csvData);
+
+    // Opcional: guardar en archivo
+    fs.writeFile("output.csv", csvData, (err) => {
+      if (err) {
+        console.error("Error al guardar el CSV:", err);
+        return;
+      }
+      console.log("CSV guardado correctamente.");
+    });
+    ipcRenderer.send("assign_csv", csvData);
+  } catch (err) {
+    console.error("Error al parsear JSON o al convertir a CSV:", err);
+  }
 });
 
 // Manejar errores
