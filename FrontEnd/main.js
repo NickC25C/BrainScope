@@ -50,6 +50,11 @@ function createWindow() {
 
   ipcMain.on("get-global-list", (event) => {
     event.reply("global-var-reply", global.fileLists);
+    global.fileLists = [];
+  });
+
+  ipcMain.handle("getVariableValue", async (event) => {
+    return global.dataCsv; // Retorna el valor de la variable monitoreada
   });
 
   ipcMain.on("get-global-csv", (event) => {
