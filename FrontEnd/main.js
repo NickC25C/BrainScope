@@ -127,7 +127,7 @@ function createProcessWindow() {
     window.close();
   });
 
-  ipcMain.on("open-file-dialog", async (event) => {
+  ipcMain.on("open-csv-dialog", async (event) => {
     const { canceled, filePaths } = await dialog
       .showOpenDialog({
         properties: ["openFile"], // Permite seleccionar múltiples archivos

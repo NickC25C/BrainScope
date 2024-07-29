@@ -7,7 +7,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const fileList = document.getElementById("fileList"); // Asegúrate de tener este elemento en tu HTML
 
   openFileBtn.addEventListener("click", () => {
-    ipcRenderer.send("open-file-dialog");
+    ipcRenderer.send("open-csv-dialog");
   });
 
   document.getElementById("changeToProcess").addEventListener("click", () => {
