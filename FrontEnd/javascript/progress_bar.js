@@ -12,11 +12,12 @@ document.addEventListener("DOMContentLoaded", function () {
       clearInterval(mainInterval);
       animateProgress(99); // Asegura que llegue al 99%
     } else {
-      targetWidth += 12;
+      const randomIncrement = Math.floor(Math.random() * (15 - 5 + 1)) + 5;
+      targetWidth += randomIncrement;
       if (targetWidth > 99) targetWidth = 99;
       animateProgress(targetWidth);
     }
-  }, 3000);
+  }, 4000);
 
   function startWatchingVariable() {
     this.checkVariableInterval = setInterval(() => {

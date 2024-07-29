@@ -2,7 +2,7 @@ import requests
 import json
 
 # La URL del endpoint de tu API
-url = "http://172.28.160.1:5000/process_data"
+url = "http://158.42.185.67:5000/process_data"
 
 class Comunicator:
     # Hacemos la solicitud POST

@@ -10,7 +10,20 @@ document.getElementById("DownloadData").addEventListener("click", () => {
     console.log("La variable global es:", dataCsv);
     // Obtener la carpeta de descargas predeterminada del sistema
     const downloadsFolder = path.join(os.homedir(), "Downloads");
-    let filePath = path.join(downloadsFolder, "Process_Data.csv"); // Ruta completa del archivo en la carpeta de descargas
+
+    let baseFileName = "Process_Data";
+    let fileExtension = ".csv";
+    let filePath = path.join(downloadsFolder, baseFileName + fileExtension);
+    let counter = 1;
+
+    // Comprobar si el archivo existe y ajustar el nombre si es necesario
+    while (fs.existsSync(filePath)) {
+      filePath = path.join(
+        downloadsFolder,
+        `${baseFileName}(${counter})${fileExtension}`
+      );
+      counter++;
+    }
 
     // Guardar el archivo en la ruta especificada
     fs.writeFile(filePath, dataCsv, (err) => {
@@ -20,6 +33,7 @@ document.getElementById("DownloadData").addEventListener("click", () => {
       }
       alert("Archivo guardado con éxito en la carpeta de descargas!");
     });
+
     ipcRenderer.send("change-page", "index.html");
   });
 });

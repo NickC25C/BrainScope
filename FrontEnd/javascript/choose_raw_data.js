@@ -72,14 +72,16 @@ function countFileTypes(files) {
 
 function updateProgressBar(targetPercentage) {
   const progressBar = document.getElementById("progressbar");
-  let currentPercentage = parseInt(progressBar.style.width, 10) || 0; // Inicializa en 0 si no hay valor
+  let currentPercentage = parseInt(progressBar.style.width, 10) || 0;
 
   function animateProgress() {
     if (currentPercentage < targetPercentage) {
       currentPercentage++;
       progressBar.style.width = currentPercentage + "%";
       progressBar.textContent = currentPercentage + "%";
-      setTimeout(animateProgress, 20); // Ajusta la velocidad de la animación cambiando el tiempo de espera
+      setTimeout(animateProgress, 20);
+    } else if (currentPercentage === 100) {
+      document.getElementById("changeToProcess").disabled = false; // Habilitar el botón cuando se alcanza el 100%
     }
   }
 
