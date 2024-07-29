@@ -5,6 +5,8 @@ var { ipcRenderer } = require("electron");
 
 ipcRenderer.send("get-global-list");
 
+let commandId = 0; // Contador global para los IDs de comando
+
 function sendFile(filePath, commandMethod) {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, "utf8", (err, data) => {
@@ -14,6 +16,7 @@ function sendFile(filePath, commandMethod) {
         return;
       }
       const command = {
+        id: ++commandId, // Incrementar el ID para cada nuevo comando
         method: commandMethod,
         params: {
           inputfile: data,
@@ -63,7 +66,27 @@ function sendFileToTransform(filePath) {
 }
 // Escuchar respuestas de Python
 pythonProcess.stdout.on("data", (data) => {
-  console.log(`stdout: ${data.toString()}`);
+  let response;
+  try {
+    response = JSON.parse(data.toString());
+  } catch (error) {
+    console.error("Error parsing JSON from Python:", error);
+    return;
+  }
+
+  if (response.id) {
+    if (response.id === 1) {
+      ipcRenderer.send("load_Engagement", response.result);
+    } else if (response.id === 2) {
+      ipcRenderer.send("load_Memorization", response.result);
+    } else if (response.id === 3) {
+      ipcRenderer.send("load_Workload", response.result);
+    }
+    console.log(`Response for command ID ${response.id}:`, response);
+    // Aquí podrías llamar a una función que maneje la respuesta basada en el ID
+  } else {
+    console.error("No ID in response from Python");
+  }
 });
 
 // Manejar errores

@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from petitions import ViewerFacade
+from ViewerFacade import ViewerFacade
 
 class TestViewerFacade(unittest.TestCase):
 
@@ -24,7 +24,7 @@ class TestViewerFacade(unittest.TestCase):
         self.mock_raw_data.save_cleaned_data.return_value = 'saved_data'
 
         inputfile = 'input_file'
-        result = self.viewer_facade.trasnformData(inputfile)
+        result = self.viewer_facade.transformData(inputfile)
 
         self.mock_raw_data.load_and_configure_data.assert_called_once_with(inputfile)
         self.mock_raw_data.filter_signal.assert_called_once_with('raw_data')

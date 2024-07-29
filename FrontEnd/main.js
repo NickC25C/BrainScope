@@ -2,6 +2,9 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 require("@electron/remote/main").initialize();
 
 global.fileLists = [];
+global.memorization = [];
+global.workload = [];
+global.engagement = [];
 global.dataCsv;
 
 function createWindow() {
@@ -48,6 +51,18 @@ function createWindow() {
     global.dataCsv = csvFile;
   });
 
+  ipcMain.on("load_Engagement", (event, engagement) => {
+    global.engagement = engagement;
+  });
+
+  ipcMain.on("load_Memorization", (event, memorization) => {
+    global.memorization = memorization;
+  });
+
+  ipcMain.on("load_Workload", (event, worklaod) => {
+    global.workload = worklaod;
+  });
+
   ipcMain.on("get-global-list", (event) => {
     event.reply("global-var-reply", global.fileLists);
     global.fileLists = [];
@@ -55,6 +70,21 @@ function createWindow() {
 
   ipcMain.handle("getVariableValue", async (event) => {
     return global.dataCsv; // Retorna el valor de la variable monitoreada
+  });
+
+  ipcMain.handle("getEngagement", async (event) => {
+    console.log("holaaaa");
+    return global.engagement; // Retorna el valor de la variable monitoreada
+  });
+
+  ipcMain.handle("getMemorization", async (event) => {
+    console.log("putaaaaaaaaaaaa");
+    return global.memorization; // Retorna el valor de la variable monitoreada
+  });
+
+  ipcMain.handle("getWorkload", async (event) => {
+    console.log("Y MÁS");
+    return global.workload; // Retorna el valor de la variable monitoreada
   });
 
   ipcMain.on("get-global-csv", (event) => {
