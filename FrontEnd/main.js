@@ -65,7 +65,10 @@ function createWindow() {
 
   ipcMain.on("get-global-list", (event) => {
     event.reply("global-var-reply", global.fileLists);
-    global.fileLists = [];
+  });
+
+  ipcMain.on("get-video-list", (event) => {
+    event.reply("global-video-reply", global.fileLists);
   });
 
   ipcMain.handle("getVariableValue", async (event) => {

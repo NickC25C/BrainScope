@@ -1,5 +1,6 @@
 import sys
 import json
+import base64
 from ViewerFacade import ViewerFacade
 
 def main():
@@ -13,8 +14,9 @@ def main():
                 'result': None,
                 'error': None
             }
-            print("command")
+            print(command)
             sys.stdout.flush()
+            
 
             # Decodificar el contenido del CSV desde la entrada y procesarlo
             if command['method'] == 'transformData':
@@ -29,6 +31,17 @@ def main():
             elif command['method'] == 'getWorkloadFile':
                 file_content = command['params']['inputfile']
                 response['result'] = viewer.getWorkloadFile(file_content)
+            elif command['method'] == 'saveInformationVideo':
+                clip = command['params']['clip']
+                print(clip)
+                sys.stdout.flush()
+                video_data = base64.b64decode(clip.split(',')[1])  # Decodificar base64
+                with open("temp_video.mp4", "wb") as video_file:
+                    video_file.write(video_data)
+                    viewer.saveInformationVideo(clip)
+            elif command['method'] == 'getWorkloadFile':
+                fragment = command['params']['fragment']
+                response['result'] = viewer.getDataGraphicWorkload(fragment)
             else:
                 response['error'] = 'Unknown command'
 
