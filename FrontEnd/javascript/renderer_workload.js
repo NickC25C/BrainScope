@@ -87,5 +87,5 @@ window.addEventListener("load", function () {
   var ctx_Wor = document.getElementById("myChart_Workload").getContext("2d");
   setTimeout(() => {
     initializeChartWorkload(ctx_Wor);
-  }, 1000);
+  }, 2000);
 });

@@ -86,5 +86,5 @@ window.addEventListener("load", function () {
   var ctx_Eng = document.getElementById("myChart_Engagement").getContext("2d");
   setTimeout(() => {
     initializeChartEngagement(ctx_Eng);
-  }, 12000);
+  }, 6000);
 });

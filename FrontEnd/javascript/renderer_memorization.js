@@ -88,5 +88,5 @@ window.addEventListener("load", function () {
     .getContext("2d");
   setTimeout(() => {
     initializeChartMemorization(ctx_Mem);
-  }, 6000);
+  }, 4000);
 });
