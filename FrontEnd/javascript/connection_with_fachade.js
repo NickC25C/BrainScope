@@ -53,20 +53,22 @@ async function processFiles(file) {
 }
 
 function sendClip(videoPath) {
-  const command = {
-    id: ++commandId,
-    method: "saveInformationVideo",
-    params: {
-      clip: videoPath,
-    },
-  };
-  pythonProcess.stdin.write(JSON.stringify(command) + "\n");
+  return new Promise((resolve, reject) => {
+    const command = {
+      id: 4,
+      method: "saveInformationVideo",
+      params: {
+        clip: videoPath,
+      },
+    };
+    pythonProcess.stdin.write(JSON.stringify(command) + "\n", resolve);
+  });
 }
 
 ipcRenderer.on("global-var-reply", (event, fileList) => {
   console.log("La variable global es:", fileList);
   processFiles(fileList[0]);
-  //sendClip(fileList[1]);
+  sendClip(fileList[1]);
 });
 
 // Lanzar el proceso Python

@@ -13,10 +13,7 @@ def main():
                 'id': command['id'],  # Asegúrate de incluir el ID del comando en la respuesta
                 'result': None,
                 'error': None
-            }
-            print(command)
-            sys.stdout.flush()
-            
+            }     
 
             # Decodificar el contenido del CSV desde la entrada y procesarlo
             if command['method'] == 'transformData':
@@ -33,15 +30,11 @@ def main():
                 response['result'] = viewer.getWorkloadFile(file_content)
             elif command['method'] == 'saveInformationVideo':
                 clip = command['params']['clip']
-                print(clip)
-                sys.stdout.flush()
-                video_data = base64.b64decode(clip.split(',')[1])  # Decodificar base64
-                with open("temp_video.mp4", "wb") as video_file:
-                    video_file.write(video_data)
-                    viewer.saveInformationVideo(clip)
-            elif command['method'] == 'getWorkloadFile':
+                viewer.saveInformationVideo(clip)
+            elif command['method'] == 'getDataGraphicWorkload':
                 fragment = command['params']['fragment']
-                response['result'] = viewer.getDataGraphicWorkload(fragment)
+                response['result'] = fragment
+                #viewer.getDataGraphicWorkload(fragment)
             else:
                 response['error'] = 'Unknown command'
 
