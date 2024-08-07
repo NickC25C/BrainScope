@@ -5,6 +5,28 @@ var { ipcRenderer } = require("electron");
 
 ipcRenderer.send("get-global-list");
 
+window.addEventListener("DOMContentLoaded", () => {
+  ipcRenderer.send("get-video-list");
+  var videoContainer = document.getElementById("mainVideo"); // Asegúrate de tener este ID en tu <video>
+
+  ipcRenderer.on("global-video-reply", (event, fileList) => {
+    var videoPath = fileList[1]; // Ruta del nuevo video
+    var videoElement = document.getElementById("videoSource");
+    videoElement.src = videoPath;
+    videoContainer.load(); // Llama a load en el elemento video
+    console.log(videoElement.src);
+  });
+
+  videoContainer.addEventListener("click", (e) => {
+    const currentTime = videoContainer.currentTime; // Obtiene el tiempo actual del video en segundos
+    reciveWorkloadFragment(currentTime);
+    reciveMemorizationFragment(currentTime);
+    reciveEngagementFragment(currentTime);
+    console.log(`Tiempo actual: ${currentTime} segundos`);
+    alert(`Hiciste clic en el tiempo: ${currentTime.toFixed(2)} segundos`);
+  });
+});
+
 function sendFile(filePath, commandMethod) {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, "utf8", (err, data) => {
@@ -95,6 +117,45 @@ function sendFileToTransform(filePath) {
     //pythonProcess.stdin.end();
   });
 }
+
+function reciveWorkloadFragment(fragment) {
+  return new Promise((resolve, reject) => {
+    const command = {
+      id: 5,
+      method: "getDataGraphicWorkload",
+      params: {
+        fragment: fragment,
+      },
+    };
+    pythonProcess.stdin.write(JSON.stringify(command) + "\n", resolve);
+  });
+}
+
+function reciveMemorizationFragment(fragment) {
+  return new Promise((resolve, reject) => {
+    const command = {
+      id: 6,
+      method: "getDataGraphicMemorization",
+      params: {
+        fragment: fragment,
+      },
+    };
+    pythonProcess.stdin.write(JSON.stringify(command) + "\n", resolve);
+  });
+}
+
+function reciveEngagementFragment(fragment) {
+  return new Promise((resolve, reject) => {
+    const command = {
+      id: 7,
+      method: "getDataGraphicEngagement",
+      params: {
+        fragment: fragment,
+      },
+    };
+    pythonProcess.stdin.write(JSON.stringify(command) + "\n", resolve);
+  });
+}
 // Escuchar respuestas de Python
 pythonProcess.stdout.on("data", (data) => {
   let response;
@@ -112,6 +173,12 @@ pythonProcess.stdout.on("data", (data) => {
       ipcRenderer.send("load_Memorization", response.result);
     } else if (response.id === 3) {
       ipcRenderer.send("load_Workload", response.result);
+    } else if (response.id === 5) {
+      ipcRenderer.send("load_Workload", response.result);
+    } else if (response.id === 6) {
+      ipcRenderer.send("load_Memorization", response.result);
+    } else if (response.id === 7) {
+      ipcRenderer.send("load_Engagement", response.result);
     }
     console.log(`Response for command ID ${response.id}:`, response);
     // Aquí podrías llamar a una función que maneje la respuesta basada en el ID

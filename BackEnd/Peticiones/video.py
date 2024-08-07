@@ -9,7 +9,7 @@ class ModuleVideo:
         video = VideoFileClip(clip)
         self.duration = video.duration  # Duración en segundos
         self.parts = math.ceil(video.duration/10)
+        return self.parts
     
     def getPart(self, fragment):
         return math.ceil((self.parts * fragment) / self.duration)
-

@@ -26,18 +26,26 @@ let chartEngagement;
 function startWatchingVariableEngagement() {
   this.checkVariableInterval = setInterval(() => {
     ipcRenderer.invoke("getEngagement").then((data) => {
-      if (data !== undefined) {
+      if (data !== undefined && !arraysEqual(engagementData, data)) {
         engagementData = data;
         updateChartEngagement();
-        clearInterval(this.checkVariableInterval); // Detiene el intervalo
+        //clearInterval(this.checkVariableInterval); // Detiene el intervalo
       }
     });
   }, 1000); // Comprueba cada 1 segundo
 }
 
 function updateChartEngagement() {
+  // Limpiar los datos existentes del gráfico
+  if (chartEngagement) {
+    chartEngagement.data.labels = [];
+    chartEngagement.data.datasets.forEach((dataset) => {
+      dataset.data = [];
+    });
+  }
+
   engagementData.forEach((entry) => {
-    const timeInSeconds = parseFloat(entry["time(s)"].match(/(\d+\.\d+)/)[0]);
+    const timeInSeconds = parseFloat(entry["time(s)"]);
     chartEngagement.data.labels.push(timeInSeconds);
     chartEngagement.data.datasets[0].data.push(entry.Engagement);
   });

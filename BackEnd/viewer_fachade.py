@@ -30,11 +30,16 @@ def main():
                 response['result'] = viewer.getWorkloadFile(file_content)
             elif command['method'] == 'saveInformationVideo':
                 clip = command['params']['clip']
-                viewer.saveInformationVideo(clip)
+                response['result'] = viewer.saveInformationVideo(clip)
             elif command['method'] == 'getDataGraphicWorkload':
                 fragment = command['params']['fragment']
-                response['result'] = fragment
-                #viewer.getDataGraphicWorkload(fragment)
+                response['result'] = viewer.getDataGraphicWorkload(fragment)
+            elif command['method'] == 'getDataGraphicMemorization':
+                fragment = command['params']['fragment']
+                response['result'] = viewer.getDataGraphicMemorization(fragment)
+            elif command['method'] == 'getDataGraphicEngagement':
+                fragment = command['params']['fragment']
+                response['result'] = viewer.getDataGraphicEngagement(fragment)
             else:
                 response['error'] = 'Unknown command'
 

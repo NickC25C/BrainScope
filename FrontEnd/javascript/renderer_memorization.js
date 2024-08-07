@@ -26,18 +26,26 @@ let chartMemorization;
 function startWatchingVariableMemorization() {
   this.checkVariableInterval = setInterval(() => {
     ipcRenderer.invoke("getMemorization").then((data) => {
-      if (data !== undefined) {
+      if (data !== undefined && !arraysEqual(memorizationData, data)) {
         memorizationData = data;
         updateChartMemorization();
-        clearInterval(this.checkVariableInterval); // Detiene el intervalo
+        //clearInterval(this.checkVariableInterval); // Detiene el intervalo
       }
     });
   }, 1000); // Comprueba cada 1 segundo
 }
 
 function updateChartMemorization() {
+  // Limpiar los datos existentes del gráfico
+  if (chartMemorization) {
+    chartMemorization.data.labels = [];
+    chartMemorization.data.datasets.forEach((dataset) => {
+      dataset.data = [];
+    });
+  }
+
   memorizationData.forEach((entry) => {
-    const timeInSeconds = parseFloat(entry["time(s)"].match(/(\d+\.\d+)/)[0]);
+    const timeInSeconds = parseFloat(entry["time(s)"]);
     chartMemorization.data.labels.push(timeInSeconds);
     chartMemorization.data.datasets[0].data.push(entry.Memorization);
   });

@@ -43,8 +43,16 @@ class ViewerFacade:
         return self.workload[:2500]
 
     def saveInformationVideo(self, clip):
-        self.video.saveInformationVideo(clip)
+        return self.video.saveInformationVideo(clip)
     
     def getDataGraphicWorkload(self, fragment):
         part = self.video.getPart(fragment)
         return self.workload[2500*(part - 1):2500*part]
+
+    def getDataGraphicMemorization(self, fragment):
+        part = self.video.getPart(fragment)
+        return self.memorization[2500*(part - 1):2500*part]
+        
+    def getDataGraphicEngagement(self, fragment):
+        part = self.video.getPart(fragment)
+        return self.engagement[2500*(part - 1):2500*part]

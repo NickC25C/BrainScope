@@ -23,26 +23,40 @@ Chart.register(
 let workloadData = [];
 let chartWorkload;
 
+function arraysEqual(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
 function startWatchingVariableWorkload() {
   this.checkVariableInterval = setInterval(() => {
     ipcRenderer.invoke("getWorkload").then((data) => {
-      if (data !== undefined) {
+      if (data !== undefined && !arraysEqual(workloadData, data)) {
         console.log(data);
         workloadData = data;
         updateChartWorkload();
-        clearInterval(this.checkVariableInterval); // Detiene el intervalo
+        //clearInterval(this.checkVariableInterval); // Detiene el intervalo
       }
     });
   }, 1000); // Comprueba cada 1 segundo
 }
 
 function updateChartWorkload() {
+  // Limpiar los datos existentes del gráfico
+  if (chartWorkload) {
+    chartWorkload.data.labels = [];
+    chartWorkload.data.datasets.forEach((dataset) => {
+      dataset.data = [];
+    });
+  }
+
+  // Añadir nuevos datos al gráfico
   workloadData.forEach((entry) => {
-    const timeInSeconds = parseFloat(entry["time(s)"].match(/(\d+\.\d+)/)[0]);
+    const timeInSeconds = parseFloat(entry["time(s)"]);
     chartWorkload.data.labels.push(timeInSeconds);
     chartWorkload.data.datasets[0].data.push(entry.Workload);
   });
 
+  // Actualizar el gráfico con los nuevos datos
   chartWorkload.update();
 }
 
