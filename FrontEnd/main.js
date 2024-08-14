@@ -26,6 +26,7 @@ function createWindow() {
   mainWindow.loadFile("index.html");
 
   ipcMain.on("change-page", (event, path) => {
+    global.fileLists = [];
     mainWindow.loadFile(path);
   });
 
