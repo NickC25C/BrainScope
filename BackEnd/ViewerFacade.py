@@ -1,4 +1,3 @@
-from Peticiones.raw_data import ModuleRawData
 from Peticiones.process_data import ModuleProcessData
 from Peticiones.video import ModuleVideo
 
@@ -16,16 +15,7 @@ class ViewerFacade:
 
     def initialize(self):
         self.processData = ModuleProcessData()
-        self.rawData = ModuleRawData()
         self.video = ModuleVideo()
-
-    def trasnformData(self, inputfile):
-        raw = self.rawData.load_and_configure_data(inputfile)
-        raw_filtered = self.rawData.filter_signal(raw)
-        ica = self.rawData.configure_and_fit_ica(raw_filtered)
-        ica = self.rawData.find_and_exclude_artifacts(ica, raw_filtered)
-        cleaned_data = self.rawData.apply_ica(ica, raw_filtered)
-        return self.rawData.save_cleaned_data(cleaned_data)
 
     def getEngagementFile(self, inputfile):
         engagementFile = self.processData.split_Engagement_csv(inputfile)

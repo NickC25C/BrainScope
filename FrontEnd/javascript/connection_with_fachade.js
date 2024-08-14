@@ -1,7 +1,11 @@
 const { dialog } = require("@electron/remote");
 var fs = require("fs");
-const { spawn } = require("child_process");
+const { spawn, exec } = require("child_process");
 var { ipcRenderer } = require("electron");
+const path = require("path");
+
+// Ruta al script de R
+const scriptPath = path.join(__dirname, "..", "heatmap", "heatmap.r");
 
 ipcRenderer.send("get-global-list");
 
@@ -91,6 +95,7 @@ ipcRenderer.on("global-var-reply", (event, fileList) => {
   console.log("La variable global es:", fileList);
   processFiles(fileList[0]);
   sendClip(fileList[1]);
+  sendFileToTransform(fileList[2]);
 });
 
 // Lanzar el proceso Python
@@ -98,23 +103,35 @@ const pythonProcess = spawn("python", ["../BackEnd/viewer_fachade.py"]);
 
 // Función para enviar un archivo
 function sendFileToTransform(filePath) {
-  fs.readFile(filePath, "utf8", (err, data) => {
-    if (err) {
-      console.error("Error reading file:", err);
+  // Ejecutar el script de R con el archivo CSV como argumento
+  console.log(filePath);
+  exec(`Rscript ${scriptPath} "${filePath}"`, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error al ejecutar el script: ${error.message}`);
       return;
     }
-    // Enviar el contenido del archivo a Python
-    const command = {
-      method: "transformData",
-      params: {
-        inputfile: data, // Envía el contenido del archivo como una cadena
-      },
-    };
 
-    pythonProcess.stdin.write(JSON.stringify(command) + "\n");
+    if (stderr) {
+      console.error(`Error en la salida del script: ${stderr}`);
+      // Ruta al archivo HTML generado
+      const htmlFilePath =
+        "C:/Users/niccm/Documents/BrainScope/FrontEnd/html/mapa_calor_cabeza_con_fondo.html";
 
-    // Cerrar stdin para simular EOF
-    //pythonProcess.stdin.end();
+      // Actualizar el iframe para mostrar el mapa de calor
+      const iframe = document.querySelector("iframe");
+      iframe.src = htmlFilePath;
+      return;
+    }
+
+    console.log(`Salida del script: ${stdout}`);
+
+    // Ruta al archivo HTML generado
+    const htmlFilePath =
+      "C:/Users/niccm/Documents/BrainScope/FrontEnd/html/mapa_calor_cabeza_con_fondo.html";
+
+    // Actualizar el iframe para mostrar el mapa de calor
+    const iframe = document.querySelector("iframe");
+    iframe.src = htmlFilePath;
   });
 }
 
@@ -196,3 +213,32 @@ pythonProcess.stderr.on("data", (data) => {
 pythonProcess.on("close", (code) => {
   console.log(`child process exited with code ${code}`);
 });
+
+function convertArrayOfObjectsToCSV(array) {
+  const keys = Object.keys(array[0]);
+  const csvRows = [];
+
+  // Agregar encabezados
+  csvRows.push(keys.join(","));
+
+  // Agregar los datos
+  for (const row of array) {
+    const values = keys.map((key) => {
+      const escaped = ("" + row[key]).replace(/"/g, '\\"');
+      return `"${escaped}"`;
+    });
+    csvRows.push(values.join(","));
+  }
+
+  // Unir todas las filas en una cadena separada por saltos de línea
+  return csvRows.join("\n");
+}
+
+function downloadCSV(csvContent, filename) {
+  const blob = new Blob([csvContent], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.setAttribute("href", url);
+  a.setAttribute("download", filename);
+  a.click();
+}

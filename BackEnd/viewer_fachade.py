@@ -15,11 +15,7 @@ def main():
                 'error': None
             }     
 
-            # Decodificar el contenido del CSV desde la entrada y procesarlo
-            if command['method'] == 'transformData':
-                file_content = command['params']['inputfile']
-                response['result'] = viewer.transformData(file_content)
-            elif command['method'] == 'getEngagementFile':
+            if command['method'] == 'getEngagementFile':
                 file_content = command['params']['inputfile']
                 response['result'] = viewer.getEngagementFile(file_content)
             elif command['method'] == 'getMemorizationFile':
