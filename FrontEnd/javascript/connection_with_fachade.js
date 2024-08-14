@@ -213,32 +213,3 @@ pythonProcess.stderr.on("data", (data) => {
 pythonProcess.on("close", (code) => {
   console.log(`child process exited with code ${code}`);
 });
-
-function convertArrayOfObjectsToCSV(array) {
-  const keys = Object.keys(array[0]);
-  const csvRows = [];
-
-  // Agregar encabezados
-  csvRows.push(keys.join(","));
-
-  // Agregar los datos
-  for (const row of array) {
-    const values = keys.map((key) => {
-      const escaped = ("" + row[key]).replace(/"/g, '\\"');
-      return `"${escaped}"`;
-    });
-    csvRows.push(values.join(","));
-  }
-
-  // Unir todas las filas en una cadena separada por saltos de línea
-  return csvRows.join("\n");
-}
-
-function downloadCSV(csvContent, filename) {
-  const blob = new Blob([csvContent], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.setAttribute("href", url);
-  a.setAttribute("download", filename);
-  a.click();
-}
