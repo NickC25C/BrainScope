@@ -86,6 +86,8 @@ function updateProgressBar(targetPercentage) {
       progressBar.style.width = currentPercentage + "%";
       progressBar.textContent = currentPercentage + "%";
       setTimeout(animateProgress, 20); // Ajusta la velocidad de la animación cambiando el tiempo de espera
+    } else if (currentPercentage === 100) {
+      document.getElementById("changeToVision").disabled = false; // Habilitar el botón cuando se alcanza el 100%
     }
   }
 
